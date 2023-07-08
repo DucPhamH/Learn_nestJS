@@ -10,7 +10,8 @@ import {
 
 import { BookService } from 'src/book/services/book.service';
 import { Book } from '../schemas/book.schema';
-import { CreateBookDto, updateBookDto } from '../dtos/book.dto';
+import { CreateBookDto, UpdateBookDto } from '../dtos/book.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('api/book')
 export class BookController {
@@ -29,14 +30,18 @@ export class BookController {
   @Put(':id')
   async findAndUpdateBook(
     @Param('id') id: string,
-    @Body() book: CreateBookDto,
+    @Body() book: UpdateBookDto,
   ): Promise<Book> {
     return this.bookService.findAndUpdateBook(id, book);
   }
 
   @Post()
-  async createBook(@Body() book: updateBookDto): Promise<Book> {
-    return this.bookService.createBook(book);
+  async createBook(@Body() book: CreateBookDto): Promise<Book> {
+    const bookReal = plainToClass(CreateBookDto, book, {
+      excludeExtraneousValues: true,
+    });
+    console.log(bookReal);
+    return this.bookService.createBook(bookReal);
   }
 
   @Delete(':id')

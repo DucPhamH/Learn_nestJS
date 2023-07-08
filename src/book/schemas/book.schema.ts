@@ -7,7 +7,7 @@ export type BookDocument = HydratedDocument<Book>;
   timestamps: true,
 })
 export class Book {
-  @Prop({ default: '', minlength: 3 })
+  @Prop()
   title: string;
   @Prop({ default: '', minlength: 3 })
   description: string;
